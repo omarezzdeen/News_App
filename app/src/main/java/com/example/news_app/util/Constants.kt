@@ -12,4 +12,9 @@ object Constants {
         const val SORT_BY = "sortBy"
         const val API_KEY = "apiKey"
     }
+
+    object Data{
+        const val ID_KEY = "ID"
+        const val DATA_MANAGER_KEY = "data_manager"
+    }
 }

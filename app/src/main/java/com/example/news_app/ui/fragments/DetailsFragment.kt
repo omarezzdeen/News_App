@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.news_app.R
 import com.example.news_app.databinding.FragmentDetailsBinding
 import com.example.news_app.domain.model.Article
 import com.example.news_app.domain.model.News
@@ -34,6 +35,11 @@ class DetailsFragment: BaseFragment<FragmentDetailsBinding>() {
             DataManger.getNews().collect { state ->
                 when(state){
                     is State.Loading -> {
+                        binding.apply {
+                            textDescription.text = ""
+                            textTitle.text = ""
+                            imageDetails.setImageResource(R.drawable.ic_android_black)
+                        }
                         binding.progressBar.visibility = ViewGroup.VISIBLE
                     }
 
@@ -72,11 +78,10 @@ class DetailsFragment: BaseFragment<FragmentDetailsBinding>() {
     }
 
     companion object {
-        fun newInstance(article: Article, dataManager: DataManger): DetailsFragment {
+        fun newInstance(article: Article): DetailsFragment {
             return DetailsFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(Constants.Data.ID_KEY, article)
-                    putSerializable(Constants.Data.DATA_MANAGER_KEY, dataManager)
                 }
             }
         }

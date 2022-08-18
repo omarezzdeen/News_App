@@ -4,11 +4,12 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.example.news_app.R
 import com.example.news_app.databinding.FragmentHomeBinding
 import com.example.news_app.domain.model.Article
 import com.example.news_app.domain.sealed.State
-import com.example.news_app.listener.AddFragment
 import com.example.news_app.listener.NewsListener
 import com.example.news_app.ui.adapter.HomeAdapter
 import com.example.news_app.web_services.DataManger
@@ -19,8 +20,6 @@ import kotlinx.coroutines.launch
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), NewsListener {
 
     override var LOG_TAG = "HOME_FRAGMENT"
-
-    var listener: AddFragment? = null
 
 
     override val inflate: (LayoutInflater, ViewGroup?, attachToRoot: Boolean) -> FragmentHomeBinding
@@ -60,8 +59,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), NewsListener {
     }
 
     override fun newsListener(news: Article) {
-        val detailsFragment = DetailsFragment.newInstance(news, DataManger)
-        listener?.addFragment(detailsFragment)
+        news.let {
+            val detailsFragment = DetailsFragment.newInstance(news)
+            replaceFragment(detailsFragment)
+        }
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.fragment_main, fragment)
+            addToBackStack(null)
+        }.commit()
+
     }
 
 }
